@@ -1,0 +1,15 @@
+server:
+  port: 3344
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/conduit
+    username: conduit
+    password: conduit
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
