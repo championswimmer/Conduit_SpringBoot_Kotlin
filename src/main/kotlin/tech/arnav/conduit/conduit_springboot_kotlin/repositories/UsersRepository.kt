@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 import tech.arnav.conduit.conduit_springboot_kotlin.entities.UserEntity
 
 @Repository
-interface UserRepository : PagingAndSortingRepository<UserEntity, Long> {
+interface UsersRepository : PagingAndSortingRepository<UserEntity, Long> {
 
     @Query
     fun findByUsername(@Param("username") username: String): UserEntity?
