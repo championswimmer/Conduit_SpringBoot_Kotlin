@@ -14,15 +14,15 @@ class UserEntity : BaseEntity() {
     @Column(unique = true)
     @Length(min = 4, max = 30, message = "username must be 4 to 30 chars in length")
     @NotNull
-    val username : String = ""
+    var username : String = ""
 
     @Email
     @Column(length = 50)
     @NotNull
-    val email: String = ""
+    var email: String = ""
 
     @NotNull
-    val password: String = ""
+    var password: String = ""
 
     @Lob
     val bio: String? = null

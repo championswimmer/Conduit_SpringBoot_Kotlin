@@ -7,20 +7,17 @@ import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.authentication.AnonymousAuthenticationFilter
-import org.springframework.security.web.server.authorization.AuthorizationContext
-import org.springframework.security.web.server.authorization.AuthorizationWebFilter
-import org.springframework.security.web.session.ConcurrentSessionFilter
-import org.springframework.web.filter.OncePerRequestFilter
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import tech.arnav.conduit.conduit_springboot_kotlin.security.jwt.JWTAuthenticationFilter
 import tech.arnav.conduit.conduit_springboot_kotlin.security.jwt.JWTAuthenticationManager
-import javax.servlet.http.HttpFilter
 
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 class AppSecurityConfig(
-   @Autowired val jwtAuthenticationFilter: JWTAuthenticationFilter,
-   @Autowired val authEntryPoint: AuthEntryPoint,
+    @Autowired val jwtAuthenticationFilter: JWTAuthenticationFilter,
+    @Autowired val authEntryPoint: AuthEntryPoint,
 ) : WebSecurityConfigurerAdapter() {
 
 
@@ -29,17 +26,22 @@ class AppSecurityConfig(
     }
 
     override fun configure(http: HttpSecurity) {
-        http.exceptionHandling().authenticationEntryPoint(authEntryPoint)
+
+        http// Public APIs
+//            .authorizeRequests().antMatchers(HttpMethod.GET, "/articles/**", "/profiles/*", "/tags").permitAll()
+//            // Login and Signup
+//            .and()
+//            .authorizeRequests().antMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
+//            // All authenticated APIs
+//            .and()
+            .authorizeRequests().anyRequest().permitAll()
+            // Session management not needed
             .and()
-            .addFilterBefore(jwtAuthenticationFilter, AnonymousAuthenticationFilter::class.java)
-            // Public APIs
-            .authorizeRequests().antMatchers(HttpMethod.GET, "/articles/**", "/profiles/*", "/tags").permitAll()
-            // Login and Signup
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
-            .authorizeRequests().antMatchers(HttpMethod.POST, "/users", "/users/login").permitAll()
-            // All authenticated APIs
-            .and()
-            .authorizeRequests().anyRequest().authenticated()
+            .exceptionHandling().authenticationEntryPoint(authEntryPoint)
+
+        http.addFilterAfter(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
     }
 
 }

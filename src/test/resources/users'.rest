@@ -1,0 +1,12 @@
+POST http://localhost:3344/users
+Content-Type: application/json
+
+{
+  "username": "arnav",
+  "email": "a@cb.lk",
+  "password": "arnav"
+}
+
+###
+GET http://localhost:3344/profiles/arnav
+Content-Type: application/json
